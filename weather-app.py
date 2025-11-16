@@ -2,7 +2,7 @@ import requests
 import json
 
 # API key
-api_key='8f554542bd68933d8c57355a0edbd308'
+api_key=''
 
 # city name input
 city_name=input("Enter your city name to check the weather status: ")
@@ -25,4 +25,5 @@ try:
         print(p_data)
 
 except requests.exceptions.RequestException as e:
+
     print("API Error ", e)
