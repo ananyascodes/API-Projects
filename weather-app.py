@@ -1,29 +1,92 @@
-import requests
+[10:48, 17/11/2025] Manan bhaiyya optimus prime: import requests
 import json
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
-# API key
-api_key=''
 
-# city name input
-city_name=input("Enter your city name to check the weather status: ")
+api_key="8f554542bd68933d8c57355a0edbd308"
 
-# API URL
-url=f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}'
+city_name=input("Enter your city name here : ")
+
+api_url=f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}'
+
 
 try: 
-    res=requests.get(url)
-    data=res.json()
+   res=requests.get(api_url) 
+   if res.status_code == 200:
+       print("Request is successfull")
+       data=res.json()
+       
+       plotdata = {
+            'City': [city_name],
+            'Visibility': [data['visibility']]
+        }
+       
+       df=pd.DataFrame(plotdata)
+       sns.barplot(x='City', y='Visibility', data=df)
+       plt.title(f'Visibility in {city_name}')
+       plt.ylabel('Visibility (metres)')
+       plt.show()
+       
+   else:
+       print("Re…
+[11:22, 17/11/2025] Manan bhaiyya optimus prime: import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+import streamlit as st
 
-    if res.status_code==200:
-        print("API connection successful!")
-        print(f"CITY NAME : {data['name']}  | VISIBILITY : {data['visibility']} |  TIME-ZONE : {data['timezone']}")
-        print(f"TEMPERATURE : {data['main']['temp']} | HUMIDITY: {data['main']['humidity']} | WIND SPEED: {data['wind']['speed']}")
+api_key = "8f554542bd68933d8c57355a0edbd308"
 
-        # printing complete data
-        p_data=json.dumps(data,indent=4)
-        print(f"{city_name}'s overall data is : ")
-        print(p_data)
+st.title("OpenWeatherMap App")
 
-except requests.exceptions.RequestException as e:
+city_name = st.text_input("Enter your city name:")
 
-    print("API Error ", e)
+if city_name:
+
+    api_url = f"https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}"
+
+    try:
+        res = requests.get(api_url)
+
+        if res.status_code == 200:
+            print(f"Request is accepted : {res.status_code}")
+            data = res.json()
+
+            temp = round(data["main"]["temp"] - 273.15, 2)
+            humidity = data["main"]["humidity"]
+            visibility = data.get("visibility", 0)
+            wind = data["wind"]["speed"]
+            
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.subheader("Weather Details")
+                st.write(f"*City:* {city_name}")
+                st.write(f"*Temperature:* {temp} °C")
+                st.write(f"*Humidity:* {humidity}%")
+                st.write(f"*Visibility:* {visibility} metres")
+                st.write(f"*Wind Speed:* {wind} m/s")
+
+            with col2:
+                st.subheader("Visibility Plot")
+
+                
+                df = pd.DataFrame({
+                    "Index": [1],
+                    "Visibility": [visibility]
+                })
+
+                plt.figure(figsize=(5,3))
+                plt.plot(df["Index"], df["Visibility"], marker='o')
+                plt.title(f"Visibility in {city_name}")
+                plt.xlabel("Index")
+                plt.ylabel("Visibility (m)")
+
+                st.pyplot(plt)
+
+        else:
+            st.error("Invalid city name or request failed.")
+
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error: {e}")
