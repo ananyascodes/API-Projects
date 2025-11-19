@@ -1,11 +1,11 @@
-[10:48, 17/11/2025] Manan bhaiyya optimus prime: import requests
+import requests
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
 
-api_key="8f554542bd68933d8c57355a0edbd308"
+api_key="-"
 
 city_name=input("Enter your city name here : ")
 
@@ -90,3 +90,4 @@ if city_name:
 
     except requests.exceptions.RequestException as e:
         st.error(f"Error: {e}")
+
