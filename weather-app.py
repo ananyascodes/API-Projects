@@ -1,42 +1,9 @@
 import requests
-import json
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-
-
-api_key="-"
-
-city_name=input("Enter your city name here : ")
-
-api_url=f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}'
-
-
-try: 
-   res=requests.get(api_url) 
-   if res.status_code == 200:
-       print("Request is successfull")
-       data=res.json()
-       
-       plotdata = {
-            'City': [city_name],
-            'Visibility': [data['visibility']]
-        }
-       
-       df=pd.DataFrame(plotdata)
-       sns.barplot(x='City', y='Visibility', data=df)
-       plt.title(f'Visibility in {city_name}')
-       plt.ylabel('Visibility (metres)')
-       plt.show()
-       
-   else:
-       print("Re…
-[11:22, 17/11/2025] Manan bhaiyya optimus prime: import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 
-api_key = "8f554542bd68933d8c57355a0edbd308"
+api_key = "-"
 
 st.title("OpenWeatherMap App")
 
@@ -90,4 +57,3 @@ if city_name:
 
     except requests.exceptions.RequestException as e:
         st.error(f"Error: {e}")
-
